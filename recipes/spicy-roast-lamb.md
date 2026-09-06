@@ -11,14 +11,14 @@ Slow-cooked Middle Eastern style pulled lamb with fragrant spiced crust and grav
 * 3 teasp cumin seeds
 * 1.5 teasp ground cumin
 * 2 teasp curry powder
-* Salt and pepper
 * 1 tablesp thyme
 * 1 tablesp chopped rosemary
 * 4 cloves garlic squeezed
 * 425mls chicken stock
-* 2 tablesp fresh chopped coriander for the end!
+* 2 tablesp fresh chopped coriander
 * Lemon wedges (for serving)
 * Olive oil
+* Salt and pepper
 
 ## steps  
 1. Combine all the herbs and spices in a bowl.
@@ -38,4 +38,4 @@ Slow-cooked Middle Eastern style pulled lamb with fragrant spiced crust and grav
 * I like it when it has cooked for hours and just falls off the bone – so no need to carve – looks like ‘pulled lamb’.
 
 ## based on  
-* 
+* Joel's roasting dinner manual
