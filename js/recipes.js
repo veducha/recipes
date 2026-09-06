@@ -2,9 +2,10 @@
 const files = [
   "aubergine-chermoula.md",
   "chicken-with-fennel-beans-lemon.md",
+  "chocolate-almond-torte.md",
   "chocolate-and-beetroot-cake.md",
   "fasolakia.md",
-  "insalata-pantesca.md",
+  "italian-potato-salad.md",
   "lentejas-a-la-margarita.md",
   "moussaka.md",
   "roast-beef.md",
