@@ -1,6 +1,6 @@
 # RECIPE BOOK
 
-A super minimal static recipe website – great for keeping track of family recipes, mods to ones you find online, or have created yourself!
+A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipes or have created yourself!
 
 **Live site: [veducha.github.io/recipe-website](https://veducha.github.io/recipe-website/)**
 
