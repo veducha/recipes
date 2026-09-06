@@ -103,7 +103,7 @@ You can also include other images in the recipe using Markdown's image syntax: `
 
 
 ## OTHER OPTIONS  
-The `recipe.php` file also includes some more options you can customize:
+The `recipe.html` file also includes some more options you can customize:
 
 * `yelpLocation`: the city/state where you're located to make Yelp searches easier! No need for fancy formatting, this will work fine: `Minneapolis MN`  
 * `helpUrls`: dictionary with the `label` (text displayed) and `url` in template form. The string `<name>` will be replaced with your recipe's name  

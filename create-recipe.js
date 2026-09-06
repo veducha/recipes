@@ -132,7 +132,7 @@ $(document).ready(function() {
     // redirect to the main page
     error: function(xhr, status, err) {
       console.log(err);
-      window.location.href = 'index.php';
+      window.location.href = 'index.html';
     }
   });
 

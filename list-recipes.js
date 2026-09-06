@@ -32,7 +32,7 @@ $(document).ready(function() {
       listOfRecipes += '<li>';
     }
 
-    listOfRecipes += '<a href="recipe.php#' + anchor + '">' + name + '</a></li>';
+    listOfRecipes += '<a href="recipe.html#' + anchor + '">' + name + '</a></li>';
     prevLetter = firstLetter;
   }
 

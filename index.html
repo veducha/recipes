@@ -49,14 +49,10 @@
 		</div>
 	</body>
 
-	<!-- combo php/js to get all recipes in the folder -->
-	<script>
-		<?php $files = array_map('basename', glob('recipes/*.md')); ?>
-  	let files = <?php echo json_encode($files) ?>;
-	</script>
+	<!-- recipes list generated from recipes/*.md -->
+	<script src="recipes.js"></script>
 	
 	<!-- javascript does the rest :) -->
 	<script src="utils.js"></script>
 	<script src="list-recipes.js"></script>
 </html>
-
