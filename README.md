@@ -1,13 +1,13 @@
 # RECIPE BOOK
 
-A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipesor have created yourself!
+A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipes or have created yourself!
 
 **Live site: [veducha.github.io/recipes](https://veducha.github.io/recipes/)**
 
 ## FEATURES
 * Recipes in a simple [Markdown format](https://daringfireball.net/projects/markdown), just dump them in `recipes/` and push  
 * List of recipes will auto-populate with quick alpha links at the top  
-* Each recipe is displayed in a nice, clean format designed for use while cooking or at the grocery store – no extra 💩 or ads  
+* Each recipe is displayed in a nice, clean format designed for use while cooking or at the grocery store – no extra bloat or ads  
 * Auto-generated links to Google image search for that dish and additional recipe ideas  
 * To save your place while scrolling around on the page, click the step you're on to highlight it; click it again to remove the highlight, or use the left/right arrow keys to advance  
 * 100% static: automatically builds and deploys via GitHub Pages on every push  
@@ -127,7 +127,7 @@ To fry:
 
 ## ADDING IMAGES  
 Thanks to a suggestion from @mpember, if you have a `jpg` image with the same filename as your recipe, it will automatically be added! 
-Using images of dimensions 1200x400 for consistency.
+Preferably using images of dimensions 1200x400 for consistency (though not enforced by the code).
 
 For example: `aloo-matar.md` will automatically display `images/aloo-matar.jpg`.
 
