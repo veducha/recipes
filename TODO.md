@@ -8,7 +8,7 @@ A working checklist of family favorite recipes to add to the cookbook.
 ## 📋 Recipes to Add
 
 - Garbanzos con espinacas
-- Moussaka
+- [x] [Moussaka](recipes/moussaka.md)
 - Shepherd's pie
 - Bobotie
 - Chicken Marbella
