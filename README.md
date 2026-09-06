@@ -1,6 +1,6 @@
 # RECIPE BOOK
 
-A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipes or have created yourself!
+A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipesor have created yourself!
 
 **Live site: [veducha.github.io/recipe-website](https://veducha.github.io/recipe-website/)**
 
@@ -127,6 +127,7 @@ To fry:
 
 ## ADDING IMAGES  
 Thanks to a suggestion from @mpember, if you have a `jpg` image with the same filename as your recipe, it will automatically be added! 
+Using images of dimensions 1200x400 for consistency.
 
 For example: `aloo-matar.md` will automatically display `images/aloo-matar.jpg`.
 
