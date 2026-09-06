@@ -4,7 +4,7 @@ const files = [
   "chicken-with-fennel-beans-lemon.md",
   "chocolate-and-beetroot-cake.md",
   "fasolakia.md",
-  "italian-potato-salad.md",
+  "insalata-pantesca.md",
   "lentejas-a-la-margarita.md",
   "moussaka.md",
   "tuna-and-white-bean-salad.md"
