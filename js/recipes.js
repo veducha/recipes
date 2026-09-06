@@ -8,5 +8,6 @@ const files = [
   "lentejas-a-la-margarita.md",
   "moussaka.md",
   "roast-beef.md",
+  "roast-potatoes.md",
   "tuna-and-white-bean-salad.md"
 ];
