@@ -2,7 +2,7 @@
 
 A minimal static recipe website, forked from [Jeff Thompson's own](https://github.com/jeffThompson/Recipes) – great for keeping track of family recipesor have created yourself!
 
-**Live site: [veducha.github.io/recipe-website](https://veducha.github.io/recipes/)**
+**Live site: [veducha.github.io/recipes](https://veducha.github.io/recipes/)**
 
 ## FEATURES
 * Recipes in a simple [Markdown format](https://daringfireball.net/projects/markdown), just dump them in `recipes/` and push  
