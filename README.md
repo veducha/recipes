@@ -8,7 +8,7 @@ A minimal static recipe website, forked from [Jeff Thompson's own](https://githu
 * Recipes in a simple [Markdown format](https://daringfireball.net/projects/markdown), just dump them in `recipes/` and push  
 * List of recipes will auto-populate with quick alpha links at the top  
 * Each recipe is displayed in a nice, clean format designed for use while cooking or at the grocery store – no extra 💩 or ads  
-* Auto-generated links to a Google image search for that dish, recipes on Serious Eats and Google, and for restaurants on Yelp (in case you burn something and need takeout fast)  
+* Auto-generated links to Google image search for that dish and additional recipe ideas  
 * To save your place while scrolling around on the page, click the step you're on to highlight it; click it again to remove the highlight, or use the left/right arrow keys to advance  
 * 100% static: automatically builds and deploys via GitHub Pages on every push  
 
@@ -137,7 +137,6 @@ You can also include other images inside the recipe using Markdown's image synta
 ## OTHER OPTIONS  
 The `recipe.html` file includes some options you can customize:
 
-* `yelpLocation`: the city/state where you're located to make Yelp searches easier! (e.g. `Minneapolis MN`)  
 * `helpUrls`: dictionary with the `label` (text displayed) and `url` in template form. The string `<name>` will be replaced with your recipe's name  
 * `lookForHeroImage`: on by default, but you can turn it off if you never intend to include hero images  
 * `autoUrlSections`: list of sections in the recipe template where you want raw URLs to be turned into real links  

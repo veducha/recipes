@@ -104,17 +104,19 @@ $(document).ready(function() {
       linkIcon += '</svg>';
 
       // add some helper links
-      let recipeName = $('h1').text().toLowerCase();
-      recipeName = recipeName.replace(' ', '+');
-      let help = '<h2>help!</h2>';
-      help += '<ul>';
-      for (let j in helpUrls) {
-        let label = helpUrls[j].label;
-        let url = helpUrls[j].url.replace('<name>', recipeName);
-        help += '<li><a href="' + url + '" target="blank">' + label + '</a></li>';
+      if (typeof helpUrls !== 'undefined' && helpUrls.length > 0) {
+        let recipeName = $('h1').text().toLowerCase();
+        recipeName = recipeName.replace(' ', '+');
+        let help = '<h2>help!</h2>';
+        help += '<ul>';
+        for (let j in helpUrls) {
+          let label = helpUrls[j].label;
+          let url = helpUrls[j].url.replace('<name>', recipeName);
+          help += '<li><a href="' + url + '" target="_blank">' + label + '</a></li>';
+        }
+        help += '</ul>';
+        $('#help').html(help);
       }
-      help += '</ul>';
-      $('#help').html(help);
 
       // click a step to highlight it
       $('#steps li').click( function() {
