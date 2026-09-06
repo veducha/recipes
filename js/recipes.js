@@ -2,5 +2,7 @@
 const files = [
   "chicken-with-fennel-beans-lemon.md",
   "fasolakia.md",
-  "lentejas-a-la-margarita.md"
+  "insalata-pantesca.md",
+  "lentejas-a-la-margarita.md",
+  "tuna-and-white-bean-salad.md"
 ];
