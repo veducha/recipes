@@ -12,5 +12,6 @@ const files = [
   "roast-beef.md",
   "roast-potatoes.md",
   "spicy-roast-lamb.md",
+  "torta-di-pere-e-mandorle.md",
   "tuna-and-white-bean-salad.md"
 ];
