@@ -42,9 +42,9 @@ jobs:
       - name: Process recipe with Gemini
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          RECIPE_TITLE: ${{ github.event.client_payload.recipe_title || inputs.recipe_title }}
-          RECIPE_TEXT: ${{ github.event.client_payload.recipe_text || inputs.recipe_text }}
-          IMAGE_URL: ${{ github.event.client_payload.image_url || inputs.image_url }}
+          RECIPE_TITLE: ${{ github.event.client_payload.recipe_title || inputs.recipe_title || '' }}
+          RECIPE_TEXT: ${{ github.event.client_payload.recipe_text || inputs.recipe_text || '' }}
+          IMAGE_URL: ${{ github.event.client_payload.image_url || inputs.image_url || '' }}
         run: |
           python3 scripts/process_recipe.py
 
@@ -75,18 +75,10 @@ jobs:
           fi
 
           git commit -m "Add recipe: ${SLUG}"
-          git push -u origin "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME" --force
 
           # Open pull request
-          PR_URL=$(gh pr create \
-            --base master \
-            --head "$BRANCH_NAME" \
-            --title "Add Recipe: ${SLUG}" \
-            --body "Automated recipe submission from Google Form.
-
-- **Markdown**: \`recipes/${SLUG}.md\`
-- **Hero Image**: \`images/${SLUG}.jpg\` (included if uploaded)
-
-Review the recipe and merge when ready!")
+          PR_BODY=$(printf 'Automated recipe submission from Google Form.\n\n* Markdown: recipes/%s.md\n* Hero Image: images/%s.jpg (included if uploaded)\n\nReview the recipe and merge when ready!' "$SLUG" "$SLUG")
+          PR_URL=$(gh pr create --base master --head "$BRANCH_NAME" --title "Add Recipe: ${SLUG}" --body "$PR_BODY")
 
           echo "Created Pull Request: $PR_URL"
