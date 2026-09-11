@@ -6,13 +6,13 @@ const files = [
   "chocolate-almond-torte.md",
   "chocolate-and-beetroot-cake.md",
   "fasolakia.md",
-  "italian-potato-salad.md",
+  "insalata-pantesca.md",
   "lentejas-a-la-margarita.md",
   "moussaka.md",
   "pavlova.md",
+  "pear-and-almond-tart.md",
   "roast-beef.md",
   "roast-potatoes.md",
   "spicy-roast-lamb.md",
-  "torta-di-pere-e-mandorle.md",
   "tuna-and-white-bean-salad.md"
 ];
