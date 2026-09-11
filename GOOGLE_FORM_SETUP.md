@@ -50,8 +50,30 @@ const GITHUB_TOKEN = "github_pat_YOUR_TOKEN_HERE"; // Replace with your token fr
 const REPO_OWNER = "veducha";
 const REPO_NAME = "recipes";
 
+// Automatically triggered when a new form is submitted
 function onFormSubmit(e) {
-  const itemResponses = e.response.getItemResponses();
+  processAndDispatch(e.response);
+}
+
+// MANUALLY TRIGGER: Run this function to process/re-process the latest submission
+function triggerLatestSubmission() {
+  const form = FormApp.getActiveForm();
+  const responses = form.getResponses();
+
+  if (responses.length === 0) {
+    Logger.log("No submissions found in this form.");
+    return;
+  }
+
+  // Gets the most recent response
+  const latestResponse = responses[responses.length - 1];
+  Logger.log("Processing submission from: " + latestResponse.getTimestamp());
+  processAndDispatch(latestResponse);
+}
+
+// Core processing and dispatch logic
+function processAndDispatch(formResponse) {
+  const itemResponses = formResponse.getItemResponses();
   let recipeTitle = "";
   let recipeText = "";
   let imageUrl = "";
@@ -196,3 +218,11 @@ You can test the backend pipeline directly in GitHub before using the form:
    - Under **Pull requests**, a new PR will appear with `recipes/<title-slug>.md` and `images/<title-slug>.jpg`.
 5. Click **Merge pull request**.
 6. The `deploy.yml` workflow will automatically rebuild the index and publish the new recipe to your live site!
+
+### Test Option C: Re-Triggering Past Form Submissions
+If a recipe was already submitted through the Google Form (or you want to re-process the last submission):
+1. In the Google Apps Script editor, look at the toolbar dropdown next to **Debug**.
+2. Select **`triggerLatestSubmission`**.
+3. Click **Run** (▶️).
+4. The script will fetch the most recent response from Google Forms, share the Drive photo, and dispatch the webhook to GitHub Actions.
+
