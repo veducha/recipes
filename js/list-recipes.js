@@ -16,7 +16,8 @@ $(document).ready(function() {
       return {
         slug: slug,
         title: slug.split('-').join(' '),
-        filename: f
+        filename: f,
+        has_image: false
       };
     });
   }
@@ -42,7 +43,9 @@ $(document).ready(function() {
       listOfRecipes += '<li>';
     }
 
-    listOfRecipes += '<a href="recipe.html#' + anchor + '">' + title + '</a></li>';
+    // Add data-image attribute if recipe has an image
+    let imageAttr = item.has_image ? ' data-image="images/' + anchor + '.jpg"' : '';
+    listOfRecipes += '<a href="recipe.html#' + anchor + '"' + imageAttr + '>' + title + '</a></li>';
     prevLetter = firstLetter;
   }
 
@@ -51,4 +54,57 @@ $(document).ready(function() {
 
   // ...and the list of first-letters for quick nav
   $('#navigation').html(listOfLetters);
+
+  // Hover image preview setup
+  const $preview = $('<div id="recipe-preview"><img src="" alt="Recipe preview"></div>').appendTo('body');
+  const $previewImg = $preview.find('img');
+  let currentSrc = '';
+
+  $previewImg.on('error', function() {
+    $preview.removeClass('active');
+  });
+
+  function positionPreview(e) {
+    const previewWidth = 220;
+    const previewHeight = 140;
+    const padding = 15;
+
+    let x = e.clientX + padding;
+    let y = e.clientY + padding;
+
+    // Flip to left if too close to right edge of viewport
+    if (x + previewWidth > window.innerWidth - 10) {
+      x = e.clientX - previewWidth - padding;
+    }
+
+    // Flip above if too close to bottom edge of viewport
+    if (y + previewHeight > window.innerHeight - 10) {
+      y = e.clientY - previewHeight - padding;
+    }
+
+    $preview.css({
+      top: y + 'px',
+      left: x + 'px'
+    });
+  }
+
+  $('#toc').on('mouseenter', 'a[data-image]', function(e) {
+    const src = $(this).attr('data-image');
+    if (!src) return;
+
+    if (currentSrc !== src) {
+      $previewImg.attr('src', src);
+      currentSrc = src;
+    }
+    positionPreview(e);
+    $preview.addClass('active');
+  });
+
+  $('#toc').on('mousemove', 'a[data-image]', function(e) {
+    positionPreview(e);
+  });
+
+  $('#toc').on('mouseleave', 'a[data-image]', function() {
+    $preview.removeClass('active');
+  });
 });

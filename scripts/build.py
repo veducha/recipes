@@ -22,16 +22,19 @@ def build_recipe_manifest():
         if f.endswith(".md") and not f.startswith("_")
     ])
 
+    images_dir = os.path.join(repo_dir, "images")
     recipes = []
     for filename in raw_files:
         filepath = os.path.join(recipes_dir, filename)
         slug = filename[:-3]
         fallback_title = slug.replace("-", " ").title()
         title = extract_recipe_title(filepath, fallback_title)
+        has_image = os.path.isfile(os.path.join(images_dir, f"{slug}.jpg"))
         recipes.append({
             "title": title,
             "slug": slug,
-            "filename": filename
+            "filename": filename,
+            "has_image": has_image
         })
 
     # Sort alphabetically by title (case-insensitive)

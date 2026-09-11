@@ -273,8 +273,51 @@ hr {
   #title {
     text-align: left !important;
   }
-  #back, #help {
+  #back, #help, #recipe-preview {
     display: none;
   }
 }
+
+/* Floating hover image preview for index page */
+#recipe-preview {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+
+  /* --- ADJUSTABLE PARAMETERS --- */
+  width: 220px;          /* Thumbnail width */
+  height: 140px;         /* Thumbnail height */
+  border-radius: 8px;    /* Corner roundness */
+
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22), 0 3px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid white;
+  background-color: rgb(240, 240, 240);
+
+  /* Visibility & Fade Speed: lower duration = snappier (e.g. 0.05s or 0s for instant) */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.05s ease-out;
+}
+
+#recipe-preview.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#recipe-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Hide on touch screens */
+@media (hover: none) {
+  #recipe-preview {
+    display: none !important;
+  }
+}
+
 
