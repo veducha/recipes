@@ -76,9 +76,7 @@ p::first-letter, #ingredients li::first-letter, #steps li::first-letter, #notes 
   font-weight: 700;
   margin:      1.1em 0 0.6em 0;
 }
-#toc li {
-  text-transform: capitalize;
-}
+/* #toc li casing preserved from markdown title */
 
 /* list styling */
 ol {
