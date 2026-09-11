@@ -28,8 +28,12 @@ em {
 /* images full width */
 /* h/t @mpember for the pr suggestion */
 #heroimage img {
-  width:  100%;
-  border: 1px solid rgb(200,200,200);
+  width:           100%;
+  max-height:      350px;
+  object-fit:      cover;
+  object-position: center;
+  display:         block;
+  border:          1px solid rgb(200,200,200);
 }
 
 /* section dividers */

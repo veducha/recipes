@@ -10,7 +10,7 @@ import re
 import sys
 import requests
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageOps
 
 try:
     from google import genai
@@ -130,7 +130,13 @@ def download_and_save_image(url: str, output_path: str):
     if img.mode != "RGB":
         img = img.convert("RGB")
 
-    # Resize if excessively large to keep git repo lean (max width/height 1600px)
+    # If image is taller than 16:9 (e.g. square, portrait, 4:3), center-crop to banner
+    aspect_ratio = img.width / img.height
+    if aspect_ratio < 1.7:
+        target_height = int(img.width / (16 / 9))
+        img = ImageOps.fit(img, (img.width, target_height), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+
+    # Resize if excessively large to keep git repo lean (max width 1600px)
     max_dim = 1600
     if max(img.size) > max_dim:
         img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
