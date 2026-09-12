@@ -50,29 +50,85 @@ const GITHUB_TOKEN = "github_pat_YOUR_TOKEN_HERE"; // Replace with your token fr
 const REPO_OWNER = "veducha";
 const REPO_NAME = "recipes";
 
-// Automatically triggered when a new form is submitted
+// Automatically triggered when a new form is submitted (supports both Google Forms and Google Sheets)
 function onFormSubmit(e) {
-  processAndDispatch(e.response);
+  Logger.log("onFormSubmit invoked: " + JSON.stringify(e));
+  let data = null;
+
+  // 1. Triggered from Google Form (e.response is a FormResponse)
+  if (e && e.response) {
+    data = extractFromFormResponse(e.response);
+  }
+  // 2. Triggered from Google Sheets (e.namedValues or e.values)
+  else if (e && (e.namedValues || e.values)) {
+    data = extractFromSheetEvent(e);
+  }
+  // 3. Fallback: try active form if bound to FormApp
+  else {
+    try {
+      const form = FormApp.getActiveForm();
+      if (form) {
+        const responses = form.getResponses();
+        if (responses.length > 0) {
+          data = extractFromFormResponse(responses[responses.length - 1]);
+        }
+      }
+    } catch (err) {
+      Logger.log("FormApp fallback error: " + err);
+    }
+  }
+
+  if (!data || (!data.recipeText && !data.recipeTitle)) {
+    Logger.log("No recipe details found in submission.");
+    return;
+  }
+
+  dispatchToGitHub(data);
 }
 
 // MANUALLY TRIGGER: Run this function to process/re-process the latest submission
 function triggerLatestSubmission() {
-  const form = FormApp.getActiveForm();
-  const responses = form.getResponses();
+  // Try Form first
+  try {
+    const form = FormApp.getActiveForm();
+    if (form) {
+      const responses = form.getResponses();
+      if (responses.length > 0) {
+        const latestResponse = responses[responses.length - 1];
+        Logger.log("Processing latest Form submission from: " + latestResponse.getTimestamp());
+        const data = extractFromFormResponse(latestResponse);
+        dispatchToGitHub(data);
+        return;
+      }
+    }
+  } catch (err) {}
 
-  if (responses.length === 0) {
-    Logger.log("No submissions found in this form.");
-    return;
-  }
+  // Try Spreadsheet
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet();
+    if (sheet) {
+      const activeSheet = sheet.getActiveSheet();
+      const lastRow = activeSheet.getLastRow();
+      if (lastRow >= 2) {
+        const headers = activeSheet.getRange(1, 1, 1, activeSheet.getLastColumn()).getValues()[0];
+        const values = activeSheet.getRange(lastRow, 1, 1, activeSheet.getLastColumn()).getValues()[0];
+        const namedValues = {};
+        for (let i = 0; i < headers.length; i++) {
+          namedValues[headers[i]] = [values[i]];
+        }
+        Logger.log("Processing latest Spreadsheet submission from row: " + lastRow);
+        const data = extractFromSheetEvent({ namedValues, values });
+        dispatchToGitHub(data);
+        return;
+      }
+    }
+  } catch (err) {}
 
-  // Gets the most recent response
-  const latestResponse = responses[responses.length - 1];
-  Logger.log("Processing submission from: " + latestResponse.getTimestamp());
-  processAndDispatch(latestResponse);
+  Logger.log("No submissions found to trigger.");
 }
 
-// Core processing and dispatch logic
-function processAndDispatch(formResponse) {
+// Extract data from Google Form response
+function extractFromFormResponse(formResponse) {
   const itemResponses = formResponse.getItemResponses();
   let recipeTitle = "";
   let recipeText = "";
@@ -89,34 +145,79 @@ function processAndDispatch(formResponse) {
       recipeText = response;
     } else if (questionTitle.includes("image") || questionTitle.includes("photo") || item.getItem().getType() === FormApp.ItemType.FILE_UPLOAD) {
       if (response) {
-        // response is an array of Google Drive file IDs
         const fileId = Array.isArray(response) ? response[0] : response;
-        try {
-          const file = DriveApp.getFileById(fileId);
-          // Make file viewable by link so GitHub Actions can download it
-          file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-          // Google Drive direct export URL
-          imageUrl = "https://drive.google.com/uc?export=download&id=" + fileId;
-        } catch (err) {
-          Logger.log("Error configuring Drive file sharing: " + err);
-        }
+        imageUrl = setupDriveImage(fileId);
       }
     }
   }
 
-  if (!recipeText && !recipeTitle) {
-    Logger.log("No recipe details found in submission.");
-    return;
+  return { recipeTitle, recipeText, imageUrl };
+}
+
+// Extract data from Google Sheets response
+function extractFromSheetEvent(e) {
+  let recipeTitle = "";
+  let recipeText = "";
+  let imageUrl = "";
+
+  if (e.namedValues) {
+    for (const key in e.namedValues) {
+      const lowerKey = key.toLowerCase();
+      const val = (e.namedValues[key] && e.namedValues[key][0]) ? e.namedValues[key][0] : "";
+      if (!val) continue;
+
+      if (lowerKey.includes("title")) {
+        recipeTitle = val;
+      } else if (lowerKey.includes("recipe") && !lowerKey.includes("title") && !lowerKey.includes("image")) {
+        recipeText = val;
+      } else if (lowerKey.includes("image") || lowerKey.includes("photo") || val.includes("drive.google.com")) {
+        const fileId = extractDriveFileId(val);
+        if (fileId) {
+          imageUrl = setupDriveImage(fileId);
+        }
+      }
+    }
+  } else if (e.values) {
+    if (e.values.length > 1) recipeTitle = e.values[1] || "";
+    if (e.values.length > 2) recipeText = e.values[2] || "";
+    if (e.values.length > 3) {
+      const fileId = extractDriveFileId(e.values[3]);
+      if (fileId) imageUrl = setupDriveImage(fileId);
+    }
   }
 
-  // Trigger GitHub Actions workflow via repository_dispatch
+  return { recipeTitle, recipeText, imageUrl };
+}
+
+// Extract Google Drive file ID from a URL or raw ID string
+function extractDriveFileId(str) {
+  if (!str) return "";
+  const match = str.match(/[-\w]{25,}/);
+  return match ? match[0] : "";
+}
+
+// Make Drive file viewable by link and return download URL
+function setupDriveImage(fileId) {
+  if (!fileId) return "";
+  try {
+    const file = DriveApp.getFileById(fileId);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return "https://drive.google.com/uc?export=download&id=" + fileId;
+  } catch (err) {
+    Logger.log("Error configuring Drive file sharing: " + err);
+    return "";
+  }
+}
+
+// Dispatch webhook to GitHub Actions
+function dispatchToGitHub(data) {
   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`;
   const payload = {
     event_type: "new_recipe_submission",
     client_payload: {
-      recipe_title: recipeTitle,
-      recipe_text: recipeText,
-      image_url: imageUrl
+      recipe_title: data.recipeTitle,
+      recipe_text: data.recipeText,
+      image_url: data.imageUrl
     }
   };
 
